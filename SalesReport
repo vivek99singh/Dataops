@@ -1,0 +1,26 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import year, month, count, when
+
+# Create a SparkSession
+spark = SparkSession.builder.appName("MonthlySales").getOrCreate()
+
+# Assuming you have a DataFrame named 'df' with an "OrderDate" column
+df = df.withColumn("year", year("OrderDate"))
+df = df.withColumn("month", month("OrderDate"))
+
+# Create a dictionary to map month numbers to month names
+month_names = {
+    1: "January", 2: "February", 3: "March", 4: "April",
+    5: "May", 6: "June", 7: "July", 8: "August",
+    9: "September", 10: "October", 11: "November", 12: "December"
+}
+
+# Use the 'when' function to convert month number to month name
+for month_num, month_name in month_names.items():
+    df = df.withColumn("month", when(df["month"] == month_num, month_name).otherwise(df["month"]))
+
+monthlySales = df.groupBy("year", "month") \
+                .agg(count("*").alias("count")) \
+                .orderBy("year", "month")
+
+monthlySales.show()
