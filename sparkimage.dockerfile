@@ -2,7 +2,7 @@
 FROM openjdk:8-jdk
 
 # Environment variables
-ENV SPARK_VERSION=3.1.1
+ENV SPARK_VERSION=3.5.1
 ENV HADOOP_VERSION=3.2
 ENV SPARK_HOME=/spark
 
